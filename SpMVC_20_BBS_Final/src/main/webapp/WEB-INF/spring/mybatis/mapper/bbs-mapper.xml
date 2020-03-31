@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.biz.bbs.repository.BBsDao">
+ 
+ 	<select id="selectLevel" resultType="bbsVO">
+	 	SELECT b_id,b_p_id,b_date_time,b_writer,
+		LPAD('re: ',(LEVEL-1)*4,'re: ') || b_subject AS b_subject
+		FROM tbl_bbs
+		START WITH b_p_id  = 0
+		CONNECT BY PRIOR b_id = b_p_id 
+		ORDER SIBLINGS BY b_p_id
+ 	</select>
+ 	<insert id="insert" parameterType="bbsVO">
+ 			INSERT INTO tbl_bbs(
+			 	B_ID,B_P_ID,
+				B_DATE_TIME,B_WRITER,
+				B_SUBJECT,B_CONTENT,B_FILE
+			) VALUES (				
+				SEQ_BBS.NEXTVAL,
+				#{b_p_id,jdbcType=VARCHAR},
+				#{b_date_time,jdbcType=VARCHAR},
+				#{b_writer,jdbcType=VARCHAR},
+				#{b_subject,jdbcType=VARCHAR},
+				#{b_content,jdbcType=VARCHAR},
+				#{b_file}
+ 			)
+ 	</insert>
+ 	<update id="update" parameterType="bbsVO">
+		 	UPDATE tbl_bbs SET
+				B_WRITER = #{b_writer,jdbcType=VARCHAR},
+				B_SUBJECT = #{b_subject,jdbcType=VARCHAR},
+				B_CONTENT = #{b_content,jdbcType=VARCHAR},
+				B_FILE = #{b_file}
+			WHERE
+		 		B_ID = #{b_id}
+ 	</update>
+ 
+ </mapper> 

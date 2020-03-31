@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.biz.bbs.dao.BBsDao">
+ 
+ 	<insert id="insert" parameterType="bbsVO">
+		 INSERT INTO tbl_bbs (	
+		 	B_ID,
+			B_P_ID,
+			B_DATE_TIME,
+			B_WRITER,
+			B_SUBJECT,
+			B_CONTENT,
+			B_FILE
+		) VALUES (
+			SEQ_BBS.NEXTVAL,
+			#{b_p_id,jdbcType=VARCHAR},
+			#{b_date_time,jdbcType=VARCHAR},
+			#{b_writer,jdbcType=VARCHAR},
+			#{b_subject,jdbcType=VARCHAR},
+			#{b_content,jdbcType=VARCHAR},
+			#{b_file,jdbcType=VARCHAR}
+		)
+ 	</insert>
+ 	
+ 	<update id="update" parameterType="bbsVO">
+		UPDATE tbl_bbs SET
+			B_P_ID = #{b_p_id,jdbcType=VARCHAR},
+			<!--  B_DATE_TIME = #{b_date_time,jdbcType=VARCHAR}, -->
+			B_WRITER = #{b_writer,jdbcType=VARCHAR},
+			B_SUBJECT = #{b_subject,jdbcType=VARCHAR},
+			B_CONTENT = #{b_content,jdbcType=VARCHAR},
+			B_FILE = #{b_file,jdbcType=VARCHAR}
+		WHERE
+			B_ID = #{b_id}
+ 	</update>
+ 
+ </mapper> 

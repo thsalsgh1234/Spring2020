@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.biz.readbook.persistence.ReadBookDao">
+ 
+ 	<select id="selectAll" resultType="ReadBookVO">
+ 	select * from tbl_books
+ 	</select>
+ 	<select id="findById" resultType="ReadBookVO">
+ 	SELECT * FROM tbl_books WHERE b_code = #{b_code}
+ 	</select>
+ 	<insert id="insert">
+ 	INSERT INTO `tbl_books`
+			(`b_code`,
+			`b_name`,
+			`b_auther`,
+			`b_comp`,
+			`b_year`,
+			`b_iprice`)
+			VALUES
+			(#{b_code},
+			#{b_name},
+			#{b_auther},
+			#{b_comp},
+			#{b_year},
+			#{b_iprice}
+			)
+ 	
+ 	
+ 	</insert>
+ 	<update id="update">
+ 		UPDATE `tbl_books`
+SET
+`b_name` = #{b_name},
+`b_auther` = #{b_auther},
+`b_comp` = #{b_comp},
+`b_year` = #{b_year},
+`b_iprice` = #{b_iprice}
+WHERE `b_code` = #{b_code}
+ 		
+ 		
+ 	</update>
+ 	<delete id="delete">
+ 	DELETE FROM `tbl_books`
+		WHERE `b_code` = #{b_code}
+ 	
+ 	</delete>
+ 
+ </mapper> 

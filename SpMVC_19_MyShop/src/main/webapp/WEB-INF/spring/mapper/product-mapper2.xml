@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper>
+
+	<resultMap type="productVO" id="proSubQ">
+		<id column="p_code" property="p_code" />
+		<collection property="p_sub_list"
+			column="{p_code = p_code, p_name p_name,text}"	ofType="productVO"	select="selectSub"	/>
+	</resultMap>
+
+	<select id="selectAll" resultMap="proSubQ">
+		SELECT P.*, ${text} as text
+		FROM tbl_product P
+	</select>
+	<select id="selectSub"	parameterType="java.util.Map"
+			resultType="productVO">
+		SELECT p_code, p_name, p_bcode, p_dcode
+		FROM tbl_product
+		WHERE p_pcode = #{p_pcode} AND p_name = #{p_name}
+	</select>
+	
+
+
+</mapper>  
+  

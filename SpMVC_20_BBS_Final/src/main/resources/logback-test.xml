@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<!-- console에 log를 표시할때 사용할 패턴 설정 -->
+	<appender name="myConsole" 
+			class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 
+	logback level
+		ERROR
+		WARN
+		INFO
+		DEBUG
+		TRACE
+	
+	만약 level INFO로 설정했다
+		INFO 이하의 메지시는 모두 무시
+		log.debug("메시지") 라고 설정을 하면 이메시지는
+		콘솔에 보이지 않는다.
+	 -->
+
+	<logger name="com.biz.bbs.dao" additivity="false"> 
+		<level value="INFO"/> 
+		<appender-ref ref="myConsole"/> 
+	</logger>
+
+	<logger name="com.biz.bbs.service" additivity="false"> 
+		<level value="INFO"/> 
+		<appender-ref ref="myConsole"/> 
+	</logger>
+
+	<root level="DEBUG">
+		<appender-ref ref="myConsole"/>
+	</root>
+
+</configuration>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.biz.bbs.repository.CommentDao">
+ 
+ 
+ 	<select id="findByBIdLevel" resultType="commentVO">
+	 		SELECT c_id, c_p_id, c_b_id, c_writer,
+			LPAD('re:',(LEVEL-1)*3,'re:') || c_subject AS c_subject
+			FROM tbl_comment
+			WHERE c_b_id = #{c_b_id}
+			START WITH c_p_id = 0
+			CONNECT BY PRIOR c_id = c_p_id
+			ORDER SIBLINGS BY c_p_id
+ 	
+ 	</select>
+ 
+ 	<insert id="insert" parameterType="commentVO">
+ 			INSERT INTO tbl_comment(
+					C_ID,
+					C_B_ID,
+					C_P_ID,
+					C_DATE_TIME,
+					C_WRITER,
+					C_SUBJECT
+			) VALUES (				
+				SEQ_CMT.NEXTVAL,
+				#{c_b_id},
+				#{c_p_id},
+				#{c_date_time},
+				#{c_writer},
+				#{c_subject} 			
+			)
+ 	
+ 	</insert>
+ 	<update id="update" parameterType="commentVO">
+		 	UPDATE tbl_comment SET
+				C_WRITER = #{c_writer},
+				C_SUBJECT = #{c_subject}
+			WHERE
+		 		c_id = #{c_id}
+ 	</update>
+ </mapper> 

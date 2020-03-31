@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<!-- 설정패턴등록 -->
+	<appender name="STD_OUT" 
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+			%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 설정패턴등록 -->
+	<appender name="myOUT" 
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+			------------------------------
+%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg
+------------------------------%n
+			</pattern>
+		</encoder>
+	</appender>
+
+
+	<logger name="com.biz.shop.controller" 
+				level="INFO"
+				additivity="false">
+		<appender-ref ref="STD_OUT"/>	
+	</logger>
+	<logger name="com.biz.shop.controller" 
+				level="DEBUG"
+				additivity="false">
+		<appender-ref ref="myOUT"/>	
+	</logger>
+	<logger name="com.biz.shop.provider" 
+				level="TRACE"
+				additivity="false">
+		<appender-ref ref="myOUT"/>	
+	</logger>
+	
+	
+	<logger name="com.biz.shop.service" 
+				level="DEBUG"
+				additivity="false">
+		<appender-ref ref="myOUT"/>	
+	</logger>
+	
+	<root level="INFO">
+		<appender-ref ref="STD_OUT" />
+	</root>
+
+</configuration>

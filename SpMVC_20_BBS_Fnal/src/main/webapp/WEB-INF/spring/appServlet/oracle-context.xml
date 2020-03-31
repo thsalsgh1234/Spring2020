@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/tx https://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<bean id="oracleDS" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name="username" value="bbsfinal"/>
+		<property name="password" value="bbsfinal"/>
+	</bean>
+	
+	<!-- mapperLocations : xml mapper 를 사용하기 위한 설정 -->
+	<!-- typeAliasePackage : vo 클래스를 자동으로 type 설정하기 위하여 -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="oracleDS"/>
+		<property name="mapperLocations"
+				 value="/WEB-INF/spring/mybatis/mapper/*-mapper.xml"/>
+		<property name="typeAliasesPackage"
+				 value="com.biz.bbs.domain"/>
+	</bean>
+	
+	<!-- transaction 자동화 설정 -->
+	<tx:annotation-driven/>
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="oracleDS"/>
+	</bean>
+	
+	<!-- Annotation 방식의 query사용을 위한 설정 -->
+	<mybatis-spring:scan base-package="com.biz.bbs.dao"/>
+
+</beans>
