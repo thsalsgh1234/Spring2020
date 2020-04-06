@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket https://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<bean id="webHandler" 
+			class="com.biz.socket.controller.WebSocketController"/>	
+	<bean id="chatHandler" 
+			class="com.biz.socket.controller.ChatController"/>		
+	
+	<websocket:handlers>
+		<websocket:mapping handler="webHandler" path="/info"/>
+		<websocket:mapping handler="chatHandler" path="/chat"/>
+		<websocket:sockjs/>
+	</websocket:handlers>
+
+</beans>
