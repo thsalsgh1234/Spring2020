@@ -30,10 +30,10 @@
 		<property name="dataSource" ref="authDB"/>
 		<property name="usersByUsernameQuery">
 			<value>
-				SELECT user_name AS username,
-				user_pass as password,
-				enabled
-				FROM users WHERE username=?
+				SELECT user_name AS username, 
+					user_pass as password, 
+					enabled
+				FROM tbl_users WHERE user_name=?
 			</value>
 		</property>
 		<property name="authoritiesByUsernameQuery">
@@ -65,35 +65,47 @@
 	<security:logout logout-url="/logout" />
 	
 	auto-config : form 기반 로그인, 기본인증 기본 로그인 활성화
-	use-expressions : 함수기반 표현식을 사용할 수 있다.
+	use-expressions : 함수기반 표현식을 사용할수 있다.
 	<security:http auto-config="true" use-expressions="true">
 	
 	intercept-url
-		access="hasRole()"
-	해당하는 권한이 있는 경우에는 url로 접근을 허락하고 그렇지 않으면(로그인이 안되어 있는 경우, 권한이 없는 경우)에는
-	login 화면으로 redirection한다.
+		access="hasRole()" 
+	해당하는 권한이 있는 경우에는 url로 접근을 허락하고
+	그렇지 않으면(로그인 안되어 있는 경우, 권한이 없는 경우)에는
+	login 화면으로 redirection 한다.
 	
-	access="hasRole()" : 한가지의 권한만 체크할떄
-	access="hasAnyRole()" : 두가지 이상의 권한중에 한가지라도 일치하는지 체크
-	access="permitAll()" : 별도에 인증절차 없이 통과
-	
+	access="hasRole()" : 한가지의 권한 체크할때
+	access="hasAnyRole()" : 두가지 이상의 권한중에 
+			한가지라도 일치하는지 체크
+	access="permitAll()" : 별도에 인증절차 없이 통과 
 	-->
-	
-	
 	<security:http auto-config="true" use-expressions="true">
 		<security:csrf disabled="false"/>
 		
-		<security:intercept-url pattern="/admin/**" access="hasRole('admin')"/>
-		
-		<security:intercept-url pattern="/user/mypage" access="hasAnyRole('admin','user')"/>
-		
-		<security:intercept-url pattern="/user/password" access="hasAnyRole('admin','user')"/>
-		
-		<security:intercept-url pattern="/user/**" access="permitAll()"/>
-		<security:intercept-url pattern="/**" access="permitAll()"/>
+		<security:intercept-url 
+			pattern="/admin/**"  
+			access="hasRole('admin')"/>
+
+		<security:intercept-url 
+			pattern="/user/mypage"  
+			access="hasAnyRole('admin','user')"/>
+
+		<security:intercept-url 
+			pattern="/user/password"  
+			access="hasAnyRole('admin','user')"/>
+
+		<security:intercept-url
+			pattern="/user/**"
+			access="permitAll()"
+		/>
+
+		<security:intercept-url
+			pattern="/**"
+			access="permitAll()"
+		/>
 		
 		<security:form-login
-			login-page="/login"
+			login-page="/user/login"
 			login-processing-url=""
 			default-target-url=""
 			username-parameter="username"

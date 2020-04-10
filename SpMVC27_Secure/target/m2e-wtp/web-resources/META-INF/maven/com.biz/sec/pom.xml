@@ -67,15 +67,13 @@
 			<version>${org.spring-security-version}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
+			<artifactId>spring-security-taglibs</artifactId>
 			<version>${org.spring-security-version}</version>
 		</dependency>
-
-
-
 
 		<!-- https://mvnrepository.com/artifact/org.jasypt/jasypt -->
 		<dependency>
