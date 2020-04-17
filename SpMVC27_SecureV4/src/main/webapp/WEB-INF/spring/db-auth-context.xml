@@ -51,7 +51,9 @@
 		<property name="fileEncoding" value="UTF-8"/>
 		<property name="locations">
 			<list>
+			
 				<value>/WEB-INF/spring/properties/db.connection.properties</value>
+				<value>/WEB-INF/spring/properties/naver.connection.properties</value>
 			</list>
 		</property>
 	</bean> 

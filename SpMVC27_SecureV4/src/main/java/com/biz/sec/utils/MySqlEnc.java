@@ -11,7 +11,7 @@ import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
  * 키보드에서 문자열을 입력받아서
  * 암호화된 문자열을 생성
  */
-public class EncMain {
+public class MySqlEnc {
 
 	public static void main(String[] args) {
 

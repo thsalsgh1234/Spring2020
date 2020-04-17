@@ -9,8 +9,8 @@
 	<bean id="gmailMailHandler" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com"/>
 		<property name="port" value="587"/><!-- 465 또는 24 -->
-		<property name="username" value="YOUR NAVER ID"/>
-		<property name="password" value="YOUT NAVER PASSWORD"/>
+		<property name="username" value="YOUR GMAIL ID"/>
+		<property name="password" value="YOUT GMAIL PASSWORD"/>
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.transport.protocol"></prop>
