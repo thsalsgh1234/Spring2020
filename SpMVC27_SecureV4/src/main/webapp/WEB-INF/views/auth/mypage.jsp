@@ -16,8 +16,6 @@
 	$(function(){
 		$("input").prop("readonly",true)
 		
-		
-		
 		$(document).on("click","#btn_update",function(){
 			let pass = $("#password").val()
 			if(pass == "") {
@@ -100,13 +98,13 @@
 	<div>
 		<form:input path="address" placeholder="주소"/>
 	</div>
-	
 	<div>
 		<button type="button" id="btn_update">수정</button>
 		<button type="submit" id="btn_save" disabled="disabled">저장</button>
 		<button type="button" id="btn_loss_pass">비밀번호찾기</button>
 	</div>
 	</form:form>
+
 </section>
 
 

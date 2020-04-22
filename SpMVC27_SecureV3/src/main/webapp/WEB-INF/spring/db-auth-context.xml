@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx https://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- 
+	StandardPBE... 클래스가
+	암호문을 복화할때 사용할 Salt 키를 제공해줄 보조 클래스 
+	
+	서버, 컴퓨터에 설정된 환경변수값을 읽어서 Salt로 사용할수 있도록
+	만들어주는 클래스
+	
+	Salt 문자열을 아무나 볼수있는 평문으로 설정하기
+	<property name="password" value="BIZ.COM"/>
+	
+	Salt 문자열을 컴퓨터(서버)의 환경변수에서 가져와서 사용하라
+	<property name="passwordEnvName"  value="BIZ.COM"/>		
+	-->
+	<bean id="envConfig" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+		<property name="algorithm" value="PBEWithMD5AndDES"/>
+		<property name="passwordEnvName"  value="BIZ.COM"/>		
+	</bean>
+
+	<!-- 
+	Enctypt... 클래스가 db.connection.properties 파일의 암호화된 문자열을
+	읽어서 복호화 한후 일반 문자열로 변환하여 property로 사용할수 있도록
+	도와주는 보조 클래스
+	
+	Environment... 클래스가 제공하는 Salt와, 알고리즘 설정을 사용하여
+	복화를 한다.
+	 -->
+	<bean id="encConvert"
+			class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+			<property name="config" ref="envConfig"/>
+	</bean>
+
+	<!-- 
+	db.connection.properties로 부터 username과 password를 가져와서
+	사용하기 위한 준비
+	
+	Encypt... 클래스는 StandardPBE... 클래스를 사용하여
+	db.connection.properties 파일에 저장된 암호환 문자열을 평문 문자열로
+	복화 한다.
+	-->
+	<bean class="org.jasypt.spring31.properties.EncryptablePropertyPlaceholderConfigurer">
+		<constructor-arg ref="encConvert"/>
+		<property name="fileEncoding" value="UTF-8"/>
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/spring/properties/db.connection.properties</value>
+			</list>
+		</property>
+	</bean> 
+
+	<!-- security 인증과 관련된 user DB 설정부분 -->
+	<!-- dataSource -->
+	<!-- driverClassName, url, username, password -->
+	<!-- 
+	
+	&useSSL=false : 5.7 에서 isssue
+	보안연결을 설정하지 않으면 MySQL서버에 접근하지 못하던 문제를 해결방법
+	8.x에서는 사용하지 말아야 하는 옵션
+	
+	만약 사용을 하려면 다음 항목도 같이 추가해야 한다.
+	&allowPublicKeyRetrieval=true;
+	
+	드라이버에 추가할때는 다음과 같이
+	?serverTimezone=Asia/Seoul&amp;useSSL=false&amp;allowPublicKeyRetrieval=true;
+	 -->
+	<bean id="authDB" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/secur?serverTimezone=Asia/Seoul"/>
+		<property name="username" value="${mysql.username}"/>
+		<property name="password" value="${mysql.password}"/>
+	</bean>
+	
+	<context:annotation-config/>
+	
+	<!-- 트랜잭션 관리자 활성화 -->
+	<tx:annotation-driven/>
+	
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="authDB"/>
+	</bean>
+
+</beans>
+
+
+

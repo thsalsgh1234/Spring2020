@@ -30,8 +30,6 @@ public class UserService {
 	private final UserDao userDao;
 	private final AuthoritiesDao authDao;
 
-	
-	
 	@Autowired
 	public UserService(PasswordEncoder passwordEncoder, 
 					UserDao userDao,AuthoritiesDao authDao) {
@@ -114,13 +112,10 @@ public class UserService {
 		return passwordEncoder.matches(password, userVO.getPassword());
 	}
 
-	
 	public int update(UserDetailsVO userVO,String[] authList) {
 		
 		int ret = userDao.update(userVO);
-		
 		if (ret > 0) {
-
 			List<AuthorityVO> authCollection = new ArrayList();
 			for(String auth : authList) {
 				if(!auth.isEmpty()) {
@@ -133,7 +128,6 @@ public class UserService {
 			authDao.delete(userVO.getUsername());
 			authDao.insert(authCollection);
 		}
-		
 		return ret;
 	}
 	
@@ -156,13 +150,11 @@ public class UserService {
 		// DB update가 성공하면
 		// 로그인된 session정보를 update 수행
 		if (ret > 0) {
-
 			Authentication newAuth 
 					= new UsernamePasswordAuthenticationToken(
 					oldUserVO, 	// 변경된 사용자 정보 
 					oldAuth.getCredentials(),
 					oldAuth.getAuthorities()); // 변경된 ROLE 정보
-
 			SecurityContextHolder.getContext()
 						.setAuthentication(newAuth);
 		}
@@ -185,15 +177,17 @@ public class UserService {
 		return authorities;
 	
 	}
+	
 	@Transactional
-	public List<UserDetailsVO> selectAll() {	
+	public List<UserDetailsVO> selectAll() {
 		return userDao.selectAll();
 	}
 
 	public UserDetailsVO findByUserName(String username) {
-		
 		return userDao.findByUserName(username);
-		
 	}
 
 }
+
+
+

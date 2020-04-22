@@ -16,7 +16,7 @@ import lombok.ToString;
 public class UsersVO {
 
 	private String userId;
-	private String passWord;
+	private String password;
 	private String userName;
 	private String userRolle;
 	

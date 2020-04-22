@@ -76,7 +76,7 @@ $(function(){
 
 </script>
 <nav id="navbar">
-		<a href="/">HOME</a>
+		<a href="${rootPath}/">HOME</a>
 		<a href="#">성적처리</a>
 		<a href="#">독서록관리</a>
 		

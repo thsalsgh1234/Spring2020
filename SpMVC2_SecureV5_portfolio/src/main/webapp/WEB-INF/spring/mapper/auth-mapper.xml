@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.biz.sec.persistance.AuthoritiesDao">
+
+	<insert id="insert" parameterType="list">
+		INSERT INTO authorities(username, authority)
+		VALUES
+		<foreach collection="list" item="vo" separator=" , ">
+			( #{vo.username}, #{vo.authority} )		
+		</foreach>
+	</insert>
+ </mapper>
+ 
+ 
+ 
+ 
