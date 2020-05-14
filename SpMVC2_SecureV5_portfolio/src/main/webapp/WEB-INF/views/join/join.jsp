@@ -145,7 +145,7 @@
 
 		<h2>회원가입</h2>
 		<div class="input-box">
-			<label for="username">USER NAME</label>
+			<label for="username">ID</label>
 			<form:input type="text" class="form-control" 
 					path="username"
 					placeholder="사용자 ID" />

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security-5.2.xsd">
+	
+	<!-- spring security exception message 커스터마이징 -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>/WEB-INF/spring/properties/spring-security.message.ko</value>			
+			</list>
+		</property>
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="cacheSeconds" value="5"/>
+	</bean>
+	
+	<!-- spring security project의 핵심 context 파일 -->
+	<!-- 여기에 security 설정과 관련된 내용들 작성 -->
+	
+	<!-- 암호화 설정을 사용하기 위한 bean 설정 -->
+	<!-- controller, service가 아닌 최초 인증과정에서 사용할 bean -->
+	<!-- 
+	생성자에 암호화 반복 횟수를 설정 
+	기본값은 4이므로 4일경우는 생략해도 된다.
+	편의상 4일 경우도 값을 설정해주다.
+	
+	이 횟수가 크면 클수록 암호화 정도가 깊어지는데
+	너무 크면 프로젝트 실행시간이 과도하게 길어는 현상이 발생
+	-->
+	<bean id="passwordEncoder" 
+			class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+			<constructor-arg index="0" value="4"/>
+	</bean>
+		
+	<context:component-scan base-package="com.biz.sec.service.auth"/>
+	<bean id="authProvider" class="com.biz.sec.service.auth.AuthProviderImpl">
+	</bean>
+	
+	<!-- 사용자 login을 검증 -->
+	<security:authentication-manager>
+		<security:authentication-provider ref="authProvider"/>
+	</security:authentication-manager>	
+	
+	<!-- 
+	사용자 인증을 할때 우리가 만든 login form과 연동하기 위한 설정
+	
+	POST 방식으로 서버에 데이터를 전송할때
+	반드시 서버가 제공한 인증관련 token을 포함해라 라는 설정
+	<security:csrf disabled="false"/>
+	 
+	logout 기능을 별도로 만들지 않고
+	spring security가 제공하는 logout 기능을 사용하겠다.
+	임의로 logout기능을 만들려면 logout-url에 설정을 바꾸면 된다.
+	<security:logout logout-url="/logout" />
+	
+	auto-config : form 기반 로그인, 기본인증 기본 로그인 활성화
+	use-expressions : 함수기반 표현식을 사용할수 있다.
+	<security:http auto-config="true" use-expressions="true">
+	
+	intercept-url
+		access="hasRole()" 
+	해당하는 권한이 있는 경우에는 url로 접근을 허락하고
+	그렇지 않으면(로그인 안되어 있는 경우, 권한이 없는 경우)에는
+	login 화면으로 redirection 한다.
+	
+	access="hasRole()" : 한가지의 권한 체크할때
+	access="hasAnyRole()" : 두가지 이상의 권한중에 
+			한가지라도 일치하는지 체크
+	access="permitAll()" : 별도에 인증절차 없이 통과 
+	-->
+	<security:http auto-config="true" use-expressions="true">
+		<security:csrf disabled="false"/>
+		
+		<security:intercept-url 
+			pattern="/admin/**"  
+			access="hasRole('ADMIN')"/>
+
+		<security:intercept-url 
+			pattern="/user/mypage"  
+			access="hasAnyRole('ADMIN','USER')"/>
+
+		<security:intercept-url 
+			pattern="/user/password"  
+			access="hasAnyRole('ADMIN','USER')"/>
+
+		<security:intercept-url
+			pattern="/user/**"
+			access="permitAll()"
+		/>
+
+		<security:intercept-url
+			pattern="/**"
+			access="permitAll()"
+		/>
+		
+		<security:form-login
+			login-page="/user/login"
+			login-processing-url=""
+			default-target-url=""
+			username-parameter="username"
+			password-parameter="password"
+		/>
+		<!-- 
+		logout을 실행했을때는 반드시
+		invalidate-session=true
+		delete-cookies=true로 설정을 한다.
+		
+		delete-cookies=true로 설정하지 않으면
+		웹브라우저에 저장된 쿠키를 탈취당하여
+		서버 공격에 사용될 수 있다.
+		-->
+		<security:logout
+			logout-url="/logout"
+			invalidate-session="true"
+			delete-cookies="true"
+			logout-success-url="/"
+		/>
+	</security:http>
+
+</beans>
+
+
+
+
+
+
+
+

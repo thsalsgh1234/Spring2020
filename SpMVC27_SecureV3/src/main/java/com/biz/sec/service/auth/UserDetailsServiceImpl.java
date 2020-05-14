@@ -71,8 +71,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 		userVO.setAuthorities(this.getAuthorities(username));
 		
-		userVO.setPhone("010-1231-1234");
-		userVO.setEmail("hhjkjm123@naver.com");
+		userVO.setPhone("010-111-1234");
+		userVO.setEmail("callor@callor.com");
 		userVO.setAddress("광주광역시");
 		return userVO;
 	
